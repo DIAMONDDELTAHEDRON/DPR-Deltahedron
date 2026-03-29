@@ -1,10 +1,10 @@
-local item, super = Class(Item, "evil_apple")
+local item, super = Class(Item, "good_apple")
 
 function item:init()
     super.init(self)
 
     -- Display name
-    self.name = "G.Apple"
+    self.name = "R.Apple"
     -- Name displayed when used in battle (optional)
     self.use_name = nil
 
@@ -18,7 +18,7 @@ function item:init()
     -- Shop description
     self.shop = ""
     -- Menu description
-    self.description = "It's a tangy, green apple."
+    self.description = "It's a juicy, red apple."
 
     -- Default shop price (sell price is halved)
     self.price = 0
@@ -48,7 +48,7 @@ function item:init()
 end
 
 function item:onWorldUse()
-    Game.world:startCutscene("shared_cutscenes", "bad_apple")
+    Game.world:startCutscene("shared_cutscenes", "good_apple")
 end
 
 return item

@@ -2,7 +2,7 @@ local Aiming, super = Class(Wave)
 
 function Aiming:onStart()
     -- Every 0.5 seconds...
-    self.timer:every(1, function()
+    self.timer:every(1/4, function()
         -- Get all enemies that selected this wave as their attack
         local attackers = self:getAttackers()
 

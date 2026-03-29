@@ -1,7 +1,7 @@
 return {
-  version = "1.10",
+  version = "1.11",
   luaversion = "5.1",
-  tiledversion = "1.10.2",
+  tiledversion = "1.11.2",
   class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
@@ -10,7 +10,7 @@ return {
   tilewidth = 40,
   tileheight = 40,
   nextlayerid = 8,
-  nextobjectid = 47,
+  nextobjectid = 48,
   properties = {
     ["border"] = "dev",
     ["music"] = "dev",
@@ -610,6 +610,22 @@ return {
             ["actor"] = "arlee",
             ["cutscene"] = "devroom.arlee",
             ["flagcheck"] = "!arlee_quest"
+          }
+        },
+        {
+          id = 47,
+          name = "npc",
+          type = "",
+          shape = "point",
+          x = 1016,
+          y = 257.333,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["actor"] = "chara",
+            ["text"] = "* Hi no way it's me chara from undertale"
           }
         }
       }
