@@ -9,8 +9,6 @@ function character:init()
     -- Display name
     self.name = "Noel"
 
-    self.cm_draw = true --for the character select draw function
-
     -- Actor (handles sprites)
     self:setActor("noel")
     self:setDarkTransitionActor("noel")
@@ -407,6 +405,7 @@ function character:CharacterMenuDraw()
                 if math.random(1, 10) == 1 then img = "ui/menu/icon/pain" end
                 Draw.draw(Assets.getTexture(img), x - 24, 310 + 6, 0, 2, 2)
                 Draw.draw(Assets.getTexture("ui/menu/icon/magic"), x - 24, 342 + 6, 0, 2, 2)
+    return true
 end
 
 return character

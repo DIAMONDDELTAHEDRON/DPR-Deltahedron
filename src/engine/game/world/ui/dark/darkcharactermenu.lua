@@ -134,7 +134,7 @@ function DarkCharacterMenu:selection(num)
 		self.heart_sprite:setColor(chr.party:getSoulColor())
 		self.heart_sprite:setSprite("player/"..chr.party:getSoulFacing().."/heart")
 
-		local text = chr.party.title_extended or chr.party:getTitle() or "* Placeholder~"
+		local text = chr.party:getTitleExtended() or chr.party:getTitle() or "* Placeholder~"
 		self.text:setText(text)
 	else
 		self.text:setText("Empty")
@@ -217,8 +217,8 @@ function DarkCharacterMenu:drawStats()
 
 	love.graphics.print(party:getName(), 80, 90)
 
-	if party.cm_draw then
-		party:CharacterMenuDraw()
+	if party:CharacterMenuDraw() then
+		--party:CharacterMenuDraw()
 	else
 		local x = 330
     --278, 246

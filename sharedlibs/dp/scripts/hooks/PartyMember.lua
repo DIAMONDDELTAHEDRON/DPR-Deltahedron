@@ -56,6 +56,9 @@ function PartyMember:init()
 
     -- Whether or not this party member can be the leader.
     self.can_lead = true
+
+    -- Extended title for party selection menu for the dev diner.
+    self.title_extended = nil
 end
 
 function PartyMember:getStarmanTheme() return "default" end
@@ -830,6 +833,15 @@ end
 -- Or it can be negative if you wanna be sadistic. Not judging.
 function PartyMember:autoHealSwoonAmount()
     return 0
+end
+
+
+function PartyMember:getTitleExtended()
+    return self.title_extended or self:getTitle()
+end
+
+function PartyMember:CharacterMenuDraw()
+
 end
 
 return PartyMember
