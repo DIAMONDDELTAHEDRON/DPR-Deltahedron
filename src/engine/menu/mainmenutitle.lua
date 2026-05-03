@@ -22,7 +22,7 @@ function MainMenuTitle:init(menu)
         font = "small",
         align = "center"
     })
-    self.continue_text:addFX(OutlineFX({ 0, 0, 0, 1 }, {
+    self.continue_text:addFX(OutlineFX_V2({ 0, 0, 0, 1 }, {
         thickness = 2
     }), "outline")
 
