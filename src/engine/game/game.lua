@@ -1667,6 +1667,17 @@ function Game:getElementMult(element)
     end
 end
 
+function Game:getElementAvgMult(...)
+    local list = {...}
+    local num = 0
+    
+    for _,v in ipairs(list) do
+        num = num + Game:getElementMult(v)
+    end
+    
+    return num/#list
+end
+
 function Game:addSP(ammount)
     self.sp = self.sp + ammount
     if self.sp < 0 then self.sp = 0 end

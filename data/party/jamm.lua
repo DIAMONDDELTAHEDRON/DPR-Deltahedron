@@ -96,14 +96,14 @@ function character:init()
 end
 
 function character:usesMana()
-    if (false) then
+    if Game:getFlag("jamm_skill_16") then   -- for testing purposes
         return true
     end
     return false
 end
 
 function character:getDefaultSpellResourceType()
-    if (false) then
+    if Game:getFlag("jamm_skill_16") then
         return "mana"
     end
     return "tension"
