@@ -20,6 +20,22 @@ function character:init()
     -- Default title / class (saved to the save file)
     self.title = "The Batter\nfrom OFF"
 
+    self.title_extended = [[* whats up nerds its me dess i forgot
+the password to my tumblur acc lmao
+so anyway im gonna be posing here
+[color:blue]FROM NOW ON[color:reset] get it? its a
+[font:monster_friend]DELTARUNE[font:main] refrence like how i [image:party/dess/walk/down]
+am a refrence to scioscoity like
+that one batman villan mr freeze
+did you know viallan and vanilla
+have the exact same letters? this is
+a refrence to how mr freeze is cold
+like vanilla ice cream which would
+be villian ice cream in this case
+this ties into his backstory somehow
+im pretty sure this is the case and you can trust me because i made wikihow
+]]
+
     -- Determines which character the soul comes from (higher number = higher priority)
     self.soul_priority = 1
     -- The color of this character's soul (optional, defaults to red)

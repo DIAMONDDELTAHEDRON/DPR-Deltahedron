@@ -12,6 +12,8 @@ function character:init()
     self.level = 1
     self.title = "Ketsukane\nA legacy not to\nbe forgotten."
 
+    self.title_extended = "* Level ".. self.level .." Ketsukane\n* A legacy not to be forgotten.\n\nStarts every battle with [color:yellow]D. Guard[color:reset]\nautomatically activated."
+
     self.soul_priority = 1
     self.soul_color = {1, 1, 1}
     self.soul_facing = "down"

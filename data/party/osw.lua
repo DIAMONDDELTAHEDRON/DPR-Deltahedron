@@ -16,6 +16,10 @@ function character:init()
     -- Default title / class (saved to the save file)
     self.title = "Star\nThe original."
 
+    local t = "\n\n\n\n[image:party/ostarwalker/dark/base, 0, 0, 4, 4]"
+    local v = "* This menu is pissing me off."
+    self.title_extended = v .. t
+
     -- Determines which character the soul comes from (higher number = higher priority)
     self.soul_priority = 1
     -- The color of this character's soul (optional, defaults to red)
