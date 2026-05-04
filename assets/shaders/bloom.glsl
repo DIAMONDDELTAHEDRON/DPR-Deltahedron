@@ -2,7 +2,7 @@ extern Image tex;
 
 vec4 effect(vec4 color, Image texture, vec2 uv, vec2 screen_coords)
 {
-    vec2 pixel = vec2(1.0/640.0, 1.0/480.0);
+    vec2 pixel = vec2(1.0/320.0, 1.0/240.0);
 
     vec4 base = Texel(texture, uv);
 

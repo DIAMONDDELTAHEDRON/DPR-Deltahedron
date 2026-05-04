@@ -526,7 +526,9 @@ function Lib:init()
             love.graphics.print("/", 192 - string_width_health, 7 - self.actbox.data_offset)
             Draw.setColor(color)
             love.graphics.print(self.actbox.battler.chara:getStat("health"), 207 - string_width_health, 7 - self.actbox.data_offset)
-
+            
+            Draw.setColor(self.actbox.battler.chara.shield_color or {128/255, 128/255, 128/255})
+            love.graphics.rectangle("fill", 125, 14 - self.actbox.data_offset, math.ceil((self.actbox.battler.shield / self.actbox.battler.chara:getMaxShield()) * 76), 4)
 
             Draw.setColor(mana_color)
             love.graphics.print(self.actbox.battler.chara:getMana(), 183 - mana_offset - string_width_mana, 23 - self.actbox.data_offset)
@@ -576,6 +578,8 @@ function Lib:init()
                 love.graphics.rectangle("fill", 128, 22 - self.actbox.data_offset, math.ceil(health), 9)
             end
 
+            Draw.setColor(self.actbox.battler.chara.shield_color or {128/255, 128/255, 128/255})
+            love.graphics.rectangle("fill", 128, 27 - self.actbox.data_offset, math.ceil((self.actbox.battler.shield / self.actbox.battler.chara:getMaxShield()) * 76), 4)
 
             local color = PALETTE["action_health_text"]
             if health <= 0 then

@@ -15,6 +15,10 @@ function PartyBattler:init(chara,x,y)
     self.super_flash = 0
 
     self.succumbed = false
+    
+    if self.chara.id == "jamm" and Game:getFlag("jamm_skill_4") then
+        self.shield = self.chara:getMaxShield()/2
+    end
 end
 
 function PartyBattler:removeHealthBroken(amount, swoon)
