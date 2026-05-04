@@ -146,7 +146,7 @@ function RotatingTower:update()
 		local px, py = self.world.player:getRelativePos(0, 0)
 		self.krisx = self.tower_x
 		self.krisy = self.world.player.y
-		if self.world.player.state == "CLIMB" and self.world.player.onrotatingtower then
+		if (self.world.player.state == "CLIMB" or self.world.player.state == "CLIMBSLIP") and self.world.player.onrotatingtower then
 			local adjustment = self.tower_x - self.tower_angle_fine_tune
 			local last_angle = self.tower_angle
 			self.tower_angle = MathUtils.lerp(0, 360, (px - adjustment) / self.tower_circumference)
