@@ -347,7 +347,7 @@ function RotatingTower:draw()
 						Draw.setColor(xid.color)
 						local xx = (self.tower_x - self.tower_xshake) + xid.x + (xid.xscale)
 						local yy = (self.tile_height_fine * ii) + self.tower_ystart + 10
-						self:drawGridTile(layer, xid, id, xx - cx, yy - cy, xid.color, pos, tileset, grid_w, grid_h, flip_x, flip_y, flip_diag)
+						self:drawGridTile(layer, xid, id, xx - cx, yy - cy, xid.color, pos, tileset, self.tile_width_fine, self.tile_height_fine, flip_x, flip_y, flip_diag)
 					end 
 				end
 			end
