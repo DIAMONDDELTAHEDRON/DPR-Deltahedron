@@ -61,7 +61,7 @@ function PartyMember:init()
     self.title_extended = nil
     
     -- Party member's elements
-    self.elements = {}
+    self.element = {}
 end
 
 function PartyMember:getStarmanTheme() return "default" end
@@ -847,7 +847,7 @@ function PartyMember:CharacterMenuDraw()
 end
 
 function PartyMember:getElements()
-    return self.elements
+    return self.element
 end
 
 return PartyMember
