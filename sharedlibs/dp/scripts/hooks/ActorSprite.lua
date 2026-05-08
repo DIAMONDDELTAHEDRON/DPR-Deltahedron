@@ -118,8 +118,7 @@ function ActorSprite:update()
         self.run_away_timer_2 = self.run_away_timer_2 + DTMULT
     end
 
-    -- we DO NOT want to bring the original update through super here, we want to OVERRIDE it
-    Sprite.update(self)
+    super.super.update(self)
 
     self.actor:onSpriteUpdate(self)
 end
