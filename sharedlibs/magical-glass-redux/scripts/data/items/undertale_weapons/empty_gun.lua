@@ -53,31 +53,8 @@ function item:init()
 end
 
 function item:onLightAttack(battler, enemy, damage, stretch, crit)
-    if damage <= 0 then
-        enemy:onDodge(battler, true)
-    end
-    local src = Assets.stopAndPlaySound(self:getLightAttackSound() or "laz_c")
-    src:setPitch(self:getLightAttackPitch() or 1)
-
-    local sprite = Sprite("effects/lightattack/gunshot_stab")
-    sprite.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
-    table.insert(enemy.dmg_sprites, sprite)
-    sprite:setScale(2)
-    sprite:setOrigin(0.5)
-    local relative_pos_x, relative_pos_y = enemy:getRelativePos((enemy.width / 2) - (#Game.battle.attackers - 1) * 5 / 2 + (TableUtils.getIndex(Game.battle.attackers, battler) - 1) * 5, (enemy.height / 2))
-    sprite:setPosition(relative_pos_x + enemy.dmg_sprite_offset[1], relative_pos_y + enemy.dmg_sprite_offset[2])
-    sprite.layer = LIGHT_BATTLE_LAYERS["above_arena_border"]
-    sprite.color = {battler.chara:getLightMultiboltAttackColor()}
-    enemy.parent:addChild(sprite)
-    sprite:play(2/30, true)
-
-    if crit then
-        if Utils.equal({battler.chara:getLightMultiboltAttackColor()}, COLORS.white) then
-            sprite:setColor(TableUtils.lerp(COLORS.white, COLORS.yellow, 0.5))
-        else
-            sprite:setColor(TableUtils.lerp({battler.chara:getLightMultiboltAttackColor()}, COLORS.white, 0.5))
-        end
-    end
+    local sprite = self:startLightAttackAnimation(battler, enemy, damage, stretch, crit, {sprite = "effects/lightattack/gunshot_stab", color = true,
+      crit_color = true, speed = 2/30, loop = true, scale = 2})
 
     Game.battle.timer:after(6/30, function()
         sprite:remove()
@@ -85,8 +62,8 @@ function item:onLightAttack(battler, enemy, damage, stretch, crit)
 
         local stars = {}
         for i = 0, 7 do
-            local star = Sprite("effects/lightattack/gunshot_stab")
-            star:setOrigin(0.5)
+            local star = self:startLightAttackAnimation(battler, enemy, damage, stretch, crit, {sprite = "effects/lightattack/gunshot_stab", color = true,
+              crit_color = true, speed = 4/30, loop = true, scale = 1, crit_sound = true, sound = false, trigger_dodge = false})
             star.siner = 45 * i
             star.star_sine_amt = 0
             star.star_speed = 16
@@ -96,25 +73,9 @@ function item:onLightAttack(battler, enemy, damage, stretch, crit)
             star.removable = false
             star.rotation = math.rad(20 * i)
             star.visible = false
-            local relative_pos_x, relative_pos_y = enemy:getRelativePos((enemy.width / 2) - (#Game.battle.attackers - 1) * 5 / 2 + (TableUtils.getIndex(Game.battle.attackers, battler) - 1) * 5, (enemy.height / 2))
-            star:setPosition(relative_pos_x + enemy.dmg_sprite_offset[1], relative_pos_y + enemy.dmg_sprite_offset[2])
-            star.layer = LIGHT_BATTLE_LAYERS["above_arena_border"]
             star.init_x = star.x
             star.init_y = star.y
-            star.color = {battler.chara:getLightMultiboltAttackColor()}
-            if crit then
-                if Utils.equal({battler.chara:getLightMultiboltAttackColor()}, COLORS.white) then
-                    star:setColor(TableUtils.lerp(COLORS.white, COLORS.yellow, 0.5))
-                else
-                    star:setColor(TableUtils.lerp({battler.chara:getLightMultiboltAttackColor()}, COLORS.white, 0.5))
-                end
-                Assets.stopAndPlaySound("saber3")
-            end
-            star.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
-            table.insert(enemy.dmg_sprites, star)
             table.insert(stars, star)
-            enemy.parent:addChild(star)
-            star:play(4/30, true)
         end
 
         Game.battle.timer:doWhile(function() return #stars > 0 end, function()
@@ -152,27 +113,11 @@ function item:onLightAttack(battler, enemy, damage, stretch, crit)
 
         local ring_opacity = 1
         Game.battle.timer:every(3/30, function()
-            local ring = Sprite("effects/lightattack/gunshot_remnant")
-            ring.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
-            table.insert(enemy.dmg_sprites, ring)
+            local ring = self:startLightAttackAnimation(battler, enemy, damage, stretch, crit, {sprite = "effects/lightattack/gunshot_remnant", color = true,
+              crit_color = true, speed = false, scale = 1, sound = false, trigger_dodge = false})
             local ring_form = false
             local ring_size = 1
             local ring_shots = 0
-            ring:setScale(1)
-            ring:setOrigin(0.5)
-            local relative_pos_x, relative_pos_y = enemy:getRelativePos((enemy.width / 2) - (#Game.battle.attackers - 1) * 5 / 2 + (TableUtils.getIndex(Game.battle.attackers, battler) - 1) * 5, (enemy.height / 2))
-            ring:setPosition(relative_pos_x + enemy.dmg_sprite_offset[1], relative_pos_y + enemy.dmg_sprite_offset[2])
-            ring.layer = LIGHT_BATTLE_LAYERS["above_arena_border"]
-            ring.color = {battler.chara:getLightMultiboltAttackColor()}
-            enemy.parent:addChild(ring)
-    
-            if crit then
-                if Utils.equal({battler.chara:getLightMultiboltAttackColor()}, COLORS.white) then
-                    ring:setColor(TableUtils.lerp(COLORS.white, COLORS.yellow, 0.5))
-                else
-                    ring:setColor(TableUtils.lerp({battler.chara:getLightMultiboltAttackColor()}, COLORS.white, 0.5))
-                end
-            end
     
             Game.battle.timer:doWhile(function() return ring end, function()
                 ring.alpha = ring_opacity

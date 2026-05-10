@@ -108,7 +108,7 @@ end
 
 function Game:getRecruit(id, light)
     if light then
-        id = id .. "#light"
+        id = "light/" .. id
     end
     return super.getRecruit(self, id)
 end
@@ -117,7 +117,7 @@ function Game:getRecruits(include_incomplete, include_hidden, light)
     local recruits = {}
     for id,recruit in pairs(self.recruits_data) do
         if (not recruit:getHidden() or include_hidden) and (recruit:getRecruited() == true or include_incomplete and type(recruit:getRecruited()) == "number" and recruit:getRecruited() > 0) then
-            if light == nil or light == true and StringUtils.sub(id, -6) == "#light" or light == false and StringUtils.sub(id, -6) ~= "#light" then
+            if light == nil or light == true and StringUtils.sub(id, 1, 6) == "light/" or light == false and StringUtils.sub(id, 1, 6) ~= "light/" then
                 table.insert(recruits, recruit)
             end
         end

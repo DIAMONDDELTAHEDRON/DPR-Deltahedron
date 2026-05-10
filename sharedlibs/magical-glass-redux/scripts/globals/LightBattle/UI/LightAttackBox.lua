@@ -4,7 +4,7 @@ function LightAttackBox:init(x, y)
     super.init(self, x, y)
 
     self.target_sprite = Game.battle.multi_mode and Sprite("ui/lightbattle/target_multi") or Sprite("ui/lightbattle/target")
-    self.target_sprite:setOrigin(0.5, 0.5)
+    self.target_sprite:setOrigin(0.5)
     self.target_sprite.layer = LIGHT_BATTLE_LAYERS["above_arena"]
     if not Game:isLight() then
         self.target_sprite:addFX(ShaderFX("hsv", {hue_shift = 180}))
@@ -12,7 +12,7 @@ function LightAttackBox:init(x, y)
 
     Game.battle:addChild(self.target_sprite)
     
-    self.bolt_target = Game.battle.multi_mode and 319 / 2 - 34 or 319
+    self.bolt_target = Game.battle.multi_mode and 125.5 or 319
 
     self.shoe_finished = 0
     self.attackers = Game.battle.normal_attackers

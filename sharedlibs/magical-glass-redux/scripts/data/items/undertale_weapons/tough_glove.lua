@@ -74,32 +74,11 @@ end
 
 function item:onLightAttack(battler, enemy, damage, stretch, crit)
     if Game.battle:getActionBy(battler).action == "AUTOATTACK" then
-        if damage <= 0 then
-            enemy:onDodge(battler, true)
-        end
-        local src = Assets.stopAndPlaySound(self:getLightAttackSound() or "laz_c")
-        src:setPitch(self:getLightAttackPitch() or 1)
-
-        local sprite = Sprite("effects/lightattack/hyperfist")
-        sprite.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
-        table.insert(enemy.dmg_sprites, sprite)
-        sprite:setOrigin(0.5)
-        local relative_pos_x, relative_pos_y = enemy:getRelativePos((enemy.width / 2) - (#Game.battle.attackers - 1) * 5 / 2 + (TableUtils.getIndex(Game.battle.attackers, battler) - 1) * 5, (enemy.height / 2))
-        sprite:setPosition(relative_pos_x + enemy.dmg_sprite_offset[1], relative_pos_y + enemy.dmg_sprite_offset[2])
-        sprite.layer = LIGHT_BATTLE_LAYERS["above_arena_border"]
-        sprite.color = {battler.chara:getLightMultiboltAttackColor()}
-        enemy.parent:addChild(sprite)
-        
-        Game.battle:shakeCamera(2, 2, 0.35)
-        Game.battle:shakeAttackSprite(sprite)
+        self:startLightAttackAnimation(battler, enemy, damage, stretch, crit, {sprite = "effects/lightattack/hyperfist", color = true,
+          shake = true, speed = 2/30, scale = 1, battle_shake = true})
         
         Game.battle.timer:after(10/30, function()
             self:onLightAttackHurt(battler, enemy, damage, stretch, crit)
-        end)
-
-        sprite:play(2/30, false, function(this)
-            this:remove()
-            TableUtils.removeValue(enemy.dmg_sprites, this)
         end)
     else
         local state = "PRESS" -- PRESS, PUNCHING, DONE
@@ -109,6 +88,7 @@ function item:onLightAttack(battler, enemy, damage, stretch, crit)
         local confirm_button
         local press = Sprite("ui/lightbattle/pressz_press")
         local confirm_key = StringUtils.sub(Input.getText("confirm"), 2, -2)
+        
         local relative_pos_x, relative_pos_y = 0, 0
         if Input.usingGamepad() then
             confirm_button = Sprite(Input.getTexture("confirm"))
@@ -125,14 +105,18 @@ function item:onLightAttack(battler, enemy, damage, stretch, crit)
             confirm_button:setOrigin(0.5)
             relative_pos_x, relative_pos_y = enemy:getRelativePos((enemy.width / 2), (enemy.height / 2))
         end
+        
         confirm_button:setPosition(relative_pos_x + enemy.dmg_sprite_offset[1], relative_pos_y + enemy.dmg_sprite_offset[2])
+        
         local press_timer = 3
         press:setOrigin(0.5)
         local relative_pos_x, relative_pos_y = enemy:getRelativePos((enemy.width / 2), (enemy.height / 2))
         press:setPosition(relative_pos_x + enemy.dmg_sprite_offset[1], relative_pos_y + enemy.dmg_sprite_offset[2])
+        
         press:setLayer(LIGHT_BATTLE_LAYERS["above_arena_border"])
         press.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
         table.insert(enemy.dmg_sprites, press)
+        
         confirm_button:setLayer(LIGHT_BATTLE_LAYERS["above_arena_border"])
         confirm_button.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
         table.insert(enemy.dmg_sprites, confirm_button)
@@ -193,46 +177,24 @@ function item:onLightAttack(battler, enemy, damage, stretch, crit)
                             confirm_button:remove()
                             TableUtils.removeValue(enemy.dmg_sprites, confirm_button)
                         end
-
-                        Assets.playSound("punchweak")
-                        local small_punch = Sprite("effects/lightattack/regfist")
-                        small_punch.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
-                        table.insert(enemy.dmg_sprites, small_punch)
-                        small_punch:setOrigin(0.5)
-                        small_punch.layer = LIGHT_BATTLE_LAYERS["above_arena_border"]
-                        small_punch.color = {battler.chara:getLightMultiboltAttackColor()}
-                        small_punch:setPosition(enemy:getRelativePos((love.math.random(enemy.width)), (love.math.random(enemy.height))))
-                        enemy.parent:addChild(small_punch)
-                        Game.battle:shakeAttackSprite(small_punch)
-                        small_punch:play(2/30, false, function(s) s:remove(); TableUtils.removeValue(enemy.dmg_sprites, small_punch) end)
-                    else
-                        if damage <= 0 then
-                            enemy:onDodge(battler, true)
-                        end
-                        state = "DONE"
-                        local src = Assets.stopAndPlaySound(self:getLightAttackSound() or "laz_c")
-                        src:setPitch(self:getLightAttackPitch() or 1)
                         
-                        local punch = Sprite("effects/lightattack/hyperfist")
-                        Game.battle:shakeCamera(2, 2, 0.35)
-                        punch.battler_id = battler and Game.battle:getPartyIndex(battler.chara.id) or nil
-                        table.insert(enemy.dmg_sprites, punch)
-                        punch:setOrigin(0.5)
-                        punch.layer = LIGHT_BATTLE_LAYERS["above_arena_border"]
-                        punch.color = {battler.chara:getLightMultiboltAttackColor()}
-                        local relative_pos_x, relative_pos_y = enemy:getRelativePos((enemy.width / 2) - (#Game.battle.attackers - 1) * 5 / 2 + (TableUtils.getIndex(Game.battle.attackers, battler) - 1) * 5, (enemy.height / 2))
-                        punch:setPosition(relative_pos_x + enemy.dmg_sprite_offset[1], relative_pos_y + enemy.dmg_sprite_offset[2])
-                        enemy.parent:addChild(punch)
-                        Game.battle:shakeAttackSprite(punch)
+                        self:startLightAttackAnimation(battler, enemy, damage, stretch, crit, {sprite = "effects/lightattack/regfist", sound = "punchweak", color = true,
+                          position = {enemy:getRelativePos((love.math.random(enemy.width)), (love.math.random(enemy.height)))}, shake = true, speed = 2/30, scale = 1, trigger_dodge = false})
+                    else
+                        state = "DONE"
+                        
+                        self:startLightAttackAnimation(battler, enemy, damage, stretch, crit, {sprite = "effects/lightattack/hyperfist", color = true,
+                          shake = true, speed = 2/30, scale = 1, battle_shake = true})
+                        
                         Game.battle.timer:after(10/30, function()
                             finishAttack()
                         end)
-                        punch:play(2 / 30, false, function(s) s:remove(); TableUtils.removeValue(enemy.dmg_sprites, punch) end)
                     end
 
                 end
             end
         end,
+        
         function()
             if state ~= "DONE" then
                 finishAttack()
@@ -240,6 +202,7 @@ function item:onLightAttack(battler, enemy, damage, stretch, crit)
             end
         end)
     end
+    
     return false
 end
 

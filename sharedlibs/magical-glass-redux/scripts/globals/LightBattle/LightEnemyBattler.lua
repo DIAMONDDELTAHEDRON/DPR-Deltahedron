@@ -889,19 +889,24 @@ function LightEnemyBattler:onHurtEnd()
     end
 end
 
+function LightEnemyBattler:setLightDefeatAnimation(anim)
+    if self.actor.use_light_battler_sprite then
+        self:toggleOverlay(true)
+        if anim and self.actor:getAnimation(anim) then
+            self.overlay_sprite:setAnimation(anim)
+        elseif self.actor:getAnimation("lightbattle_defeat") then
+            self.overlay_sprite:setAnimation("lightbattle_defeat")
+        else
+            self.overlay_sprite:setAnimation("lightbattle_hurt")
+        end
+    end
+end
+
 function LightEnemyBattler:onDefeat(damage, battler)
     if self.exit_on_defeat then
         Game.battle.timer:after(self.hurt_timer, function()
             if self.hurt_timer > 0 or self.defeated then
                 return false
-            end
-            if self.actor.use_light_battler_sprite then
-                self:toggleOverlay(true)
-                if self.actor:getAnimation("lightbattle_defeat") then
-                    self.overlay_sprite:setAnimation("lightbattle_defeat")
-                else
-                    self.overlay_sprite:setAnimation("lightbattle_hurt")
-                end
             end
             if self.can_die then
                 if self.ut_death then
@@ -922,6 +927,8 @@ function LightEnemyBattler:onDefeatRun(damage, battler)
     self.hurt_timer = -1
 
     Assets.playSound("defeatrun")
+    
+    self:setLightDefeatAnimation()
 
     local sweat = Sprite("effects/defeat/sweat")
     sweat:setOrigin(0.5, 0.5)
@@ -929,11 +936,11 @@ function LightEnemyBattler:onDefeatRun(damage, battler)
     sweat.layer = 100
     self:addChild(sweat)
 
-    Game.battle.timer:after(15/30, function()
+    Game.battle.timer:after(15 / 30, function()
         sweat:remove()
         self:getActiveSprite().run_away_light = true
 
-        Game.battle.timer:after(15/30, function()
+        Game.battle.timer:after(15 / 30, function()
             self:remove()
         end)
     end)
@@ -945,6 +952,8 @@ function LightEnemyBattler:onDefeatVaporized(damage, battler)
     self.hurt_timer = -1
 
     Assets.playSound("vaporized", 1.2)
+    
+    self:setLightDefeatAnimation()
 
     local sprite = self:getActiveSprite()
 
@@ -969,6 +978,8 @@ function LightEnemyBattler:onDefeatFatal(damage, battler)
     self.hurt_timer = -1
 
     Assets.playSound("deathnoise")
+    
+    self:setLightDefeatAnimation()
 
     local sprite = self:getActiveSprite()
 
@@ -976,7 +987,7 @@ function LightEnemyBattler:onDefeatFatal(damage, battler)
     sprite:stopShake()
 
     local death_x, death_y = sprite:getRelativePos(0, 0, self)
-    local death = FatalEffect(sprite:getTexture(), death_x, death_y, function() self:remove() end)
+    local death = LightFatalEffect(sprite:getTexture(), death_x, death_y, function() self:remove() end)
     death:setColor(sprite:getDrawColor())
     death:setScale(sprite:getScale())
     self:addChild(death)
@@ -1004,16 +1015,17 @@ function LightEnemyBattler:freeze()
     end
 
     Assets.playSound("petrify")
-
-    self:toggleOverlay(true)
+    
+    self:setLightDefeatAnimation("lightbattle_frozen")
 
     local sprite = self:getActiveSprite()
     if not sprite:setAnimation("frozen") then
         sprite:setAnimation("hurt")
     end
+    
     sprite:stopShake()
 
-    local message = self:lightStatusMessage("text", "FROZEN", {58/255, 147/255, 254/255}, true)
+    local message = self:lightStatusMessage("text", "FROZEN", {58 / 255, 147 / 255, 254 / 255}, true)
     message:resetPhysics()
     message.y = message.y + 50
 
@@ -1022,7 +1034,7 @@ function LightEnemyBattler:freeze()
     sprite.frozen = true
     sprite.freeze_progress = 0
 
-    Game.battle.timer:tween(20/30, sprite, {freeze_progress = 1})
+    Game.battle.timer:tween(20 / 30, sprite, {freeze_progress = 1})
 
     if Game:isLight() then
         Game.battle.money = Game.battle.money + 4

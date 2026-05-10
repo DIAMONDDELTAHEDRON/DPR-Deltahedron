@@ -47,7 +47,6 @@ function LightBattle:init()
 
     self:createPartyBattlers()
 
-    self.camera = Camera(self, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT, false)
     self.cutscene = nil
 
     self.current_selecting = 0
@@ -1913,7 +1912,7 @@ function LightBattle:checkGameOver()
             wave:onEnd(true)
         end
     end
-    self:shakeCamera(0)
+    self:shake(false)
     if self.encounter:onGameOver() then
         return
     end
@@ -2245,26 +2244,6 @@ function LightBattle:updateChildren()
             v:fullUpdate()
         end
     end
-end
-
-function LightBattle:shakeAttackSprite(sprite, x, y)
-    if x == nil then
-        x = 4
-        y = 4
-    elseif y == nil then
-        y = x
-    end
-    
-    sprite.timer = 0
-    local function sprite_exist() return sprite.parent end
-    self.timer:doWhile(sprite_exist, function()
-        sprite.timer = sprite.timer + DTMULT
-        if sprite.timer >= 1 then
-            sprite:move(-x / 2, -y / 2)
-            sprite:move(MathUtils.random(x), MathUtils.random(y))
-            sprite.timer = sprite.timer - 1
-        end
-    end)
 end
 
 function LightBattle:updateAttacking()
@@ -2759,8 +2738,14 @@ function LightBattle:resetEnemiesIndex(reset_xact)
     end
 end
 
-function LightBattle:shakeCamera(x, y, friction)
-    self.camera:shake(x, y, friction)
+function LightBattle:shake(x, y, friction)
+    if x == true then
+        super.shake(self, 2, 2, 0.35)
+    elseif x == false then
+        super.shake(self, 0)
+    else
+        super.shake(self, x, y, friction)
+    end
 end
 
 function LightBattle:randomTargetOld()

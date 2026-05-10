@@ -11,12 +11,12 @@ function LightMenu:draw()
         love.graphics.stencil(party_box_area, "replace", 1)
         love.graphics.setStencilTest("equal", 0)
     end
-	
+
     local offset = 0
     local offset2 = 0
     if self.top then
         offset = 270
-		if Game:getFlag("has_cell_phone") then
+        if Game:getFlag("has_cell_phone") then
 			offset2 = -36
 		end
     end
@@ -46,7 +46,6 @@ function LightMenu:draw()
     love.graphics.print("ITEM", 84, offset2 + 188 + (36 * 0))
     Draw.setColor(PALETTE["world_text"])
     love.graphics.print("STAT", 84, offset2 + 188 + (36 * 1))
-
     if Game:getFlag("has_cell_phone", false) then
         if #Game.world.calls > 0 then
             Draw.setColor(PALETTE["world_text"])
@@ -54,7 +53,7 @@ function LightMenu:draw()
             Draw.setColor(PALETTE["world_gray"])
         end
         love.graphics.print("CELL", 84, offset2 + 188 + (36 * 2))
-            
+
         Draw.setColor(PALETTE["world_text"])
         love.graphics.print("TALK", 84, offset2 + 188 + (36 * 3))
     else

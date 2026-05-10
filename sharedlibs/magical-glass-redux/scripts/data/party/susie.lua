@@ -48,4 +48,15 @@ function character:onLightTurnStart(battler)
     end
 end
 
+function character:onLightAttackHit(enemy, damage)
+    super.onLightAttackHit(self, enemy, damage)
+    
+    if not Game:isLight() then
+        if damage > 0 then
+            Assets.playSound("impact", 0.8)
+            Game.battle:shake(true)
+        end
+    end
+end
+
 return character
