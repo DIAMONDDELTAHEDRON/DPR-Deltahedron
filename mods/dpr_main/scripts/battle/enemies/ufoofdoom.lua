@@ -47,6 +47,10 @@ function UFOOfDoom:init()
 
     self:registerAct("SUPER ACT", "", {"dess"})
 
+    if Game.party[1].id == "hero" then
+        self:registerAct("Mug")
+    end
+
     self.resistances = {
         STAR = 1.5,
         DARK = 1.5,
@@ -58,6 +62,16 @@ function UFOOfDoom:onAct(battler, name)
     if name == "SUPER ACT" then
 		Game.battle:startActCutscene("ufoofdoom", "kill")
         return
+    elseif name == "Mug" then
+        if self.mugged then
+            return "* Hero threatens the UFO again, but there was nothing left to mug."
+        end
+        self.mugged = true
+        Game.inventory:addItem("brutalist_candy_cane")
+        return {
+            "* Hero threatens the UFO.\n* THE UFO OF DOOM hastily empties their pockets.",
+            "* [color:yellow]BRUTALIST CANDY CANE[color:reset] was added to your items."
+        }
     elseif name == "Standard" then --X-Action
         if battler.chara.id == "ralsei" then
 			-- Give the enemy 50% mercy
