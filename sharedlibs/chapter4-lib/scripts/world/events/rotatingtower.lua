@@ -15,7 +15,6 @@ function RotatingTower:init(data)
 	self.tower_angle_fine_tune = properties["anglefine"] or 0
 	self.use_collision_map = properties["usecollision"] ~= false
 	self.use_background_map = properties["usebg"] ~= false
-	self.offset_reticle_x = properties["retoffx"] or 0
 	self.endclimb = false
 	self.endclimbtimer = 0
 	self.tower_x = self.x or 320
@@ -291,6 +290,21 @@ function RotatingTower:draw()
 				if not (coin_angle > 350 or coin_angle <= 170) then
 					self:drawTowerCoin(event, coin_angle)
 				end
+			elseif event.id == "BellPlayable" then	
+				local adjustment = -260
+				if self.appearance == 1 then
+					adjustment = -520
+				end
+				local bell_angle_pos =  MathUtils.lerp(360, 0, (event.x + adjustment) / self.tower_circumference)
+				local bell_angle = bell_angle_pos + self.tower_angle
+				if bell_angle > 360 then
+					bell_angle = bell_angle - 360
+				elseif bell_angle < 0 then
+					bell_angle = bell_angle + 360
+				end
+				if not (bell_angle > 350 or bell_angle <= 170) then
+					self:drawTowerBell(event, bell_angle)
+				end
 			end
 		end
 	end
@@ -333,7 +347,7 @@ function RotatingTower:draw()
 						Draw.setColor(xid.color)
 						local xx = (self.tower_x - self.tower_xshake) + xid.x + (xid.xscale)
 						local yy = (self.tile_height_fine * ii) + self.tower_ystart + 10
-						self:drawGridTile(layer, xid, id, xx - cx, yy - cy, col, pos, tileset, self.tile_width_fine, self.tile_height_fine, flip_x, flip_y, flip_diag)
+						self:drawGridTile(layer, xid, id, xx - cx, yy - cy, xid.color, pos, tileset, self.tile_width_fine, self.tile_height_fine, flip_x, flip_y, flip_diag)
 					end 
 				end
 			end
@@ -539,7 +553,7 @@ function RotatingTower:draw()
 					Draw.setColor(tile_color)
 					Draw.draw(event.sprite.texture, self.tower_x + event.graphics.shake_x + tile_x, event.y + event.graphics.shake_y - 20, 0, tile_xscale, tile_yscale, ox, oy)
 				end
-			else
+			elseif not event.dont_draw_on_tower then
 				local ox, oy = event:getOriginExact()
 				local adjustment = 1
 				if self.appearance == 1 then
@@ -635,6 +649,21 @@ function RotatingTower:draw()
 				if (coin_angle > 350 or coin_angle <= 170) then
 					self:drawTowerCoin(event, coin_angle)
 				end
+			elseif event.id == "BellPlayable" then	
+				local adjustment = -260
+				if self.appearance == 1 then
+					adjustment = -520
+				end
+				local bell_angle_pos =  MathUtils.lerp(360, 0, (event.x + adjustment) / self.tower_circumference)
+				local bell_angle = bell_angle_pos + self.tower_angle
+				if bell_angle > 360 then
+					bell_angle = bell_angle - 360
+				elseif bell_angle < 0 then
+					bell_angle = bell_angle + 360
+				end
+				if (bell_angle > 350 or bell_angle <= 170) then
+					self:drawTowerBell(event, bell_angle)
+				end
 			end
 		end
 	end
@@ -690,6 +719,21 @@ function RotatingTower:drawTowerText(text, angle)
 	local factor = math.sin(math.rad(angle))
 	Draw.setColor(ColorUtils.mergeColor(COLORS.white, COLORS.black, MathUtils.clamp(1 - factor, 0, 1)))
 	Draw.draw(text.canvas, text_x, text.y)
+end
+
+function RotatingTower:drawTowerBell(event, angle)
+	local xscale = 2
+	local dist_from_tower = 15
+	if self.appearance == 2 then
+		dist_from_tower = 45
+	end
+	local xx = self.tower_x + MathUtils.lengthDirX(self.tower_radius + dist_from_tower, -math.rad(angle))
+	local factor = math.sin(math.rad(angle))
+	Draw.setColor(ColorUtils.mergeColor(ColorUtils.hexToRGB("#B4D6CA"), COLORS.black, MathUtils.clamp(1 - factor, 0, 1)))
+	Draw.draw(event.fill_tex, xx, event.y, 0, xscale, -event.bellcordlength)
+	Draw.draw(event.gradient_tex, xx, event.y - event.bellcordlength - (40 * event.bellcordfadelength), 0, xscale / 40, event.bellcordfadelength)
+	Draw.setColor(ColorUtils.mergeColor(COLORS.white, COLORS.black, MathUtils.clamp(1 - factor, 0, 1)))
+	Draw.draw(event.sprite.texture, xx, event.y, event.sprite.rotation, xscale, 2, 9, 2)
 end
 
 return RotatingTower

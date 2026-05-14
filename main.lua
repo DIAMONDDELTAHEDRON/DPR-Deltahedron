@@ -104,6 +104,7 @@ MainMenuDeadzone = require("src.engine.menu.mainmenudeadzone")
 MainMenuDLC = require("src.engine.menu.mainmenudlc")
 MainMenuWarning = require("src.engine.menu.mainmenuwarning")
 MainMenuPlugins = require("src.engine.menu.mainmenuplugins")
+MainMenuAchievements = require("src.engine.menu.mainmenuachievements")
 
 ModList = require("src.engine.menu.objects.modlist")
 ModButton = require("src.engine.menu.objects.modbutton")
@@ -151,6 +152,7 @@ Badge = require("src.engine.game.common.data.badge")
 HealItem = require("src.engine.game.common.data.healitem")
 TeaItem = require("src.engine.game.common.data.teaitem")
 TensionItem = require("src.engine.game.common.data.tensionitem")
+CallCardItem = require("src.engine.game.common.data.callcarditem")
 LightEquipItem = require("src.engine.game.common.data.lightequipitem")
 Recruit = require("src.engine.game.common.data.recruit")
 ButtonPrompt = require("src.engine.game.buttonprompt")
@@ -307,6 +309,7 @@ Quicktime = require("src.engine.game.battle.quicktime")
 Slapper = require("src.engine.game.battle.slapper")
 Combo = require("src.engine.game.battle.combo")
 Mend = require("src.engine.game.battle.mend")
+RecruitBattler = require("src.engine.game.common.data.recruitbattler")
 
 BlueSoul = require("src.engine.game.battle.souls.bluesoul")
 
@@ -349,6 +352,8 @@ SoulExpandEffect = require("src.engine.game.effects.soulexpandeffect")
 SoulGlowEffect = require("src.engine.game.effects.soulgloweffect")
 CerobaDiamondBuff = require("src.engine.game.effects.cerobadiamondbuff")
 
+ChaosEmerald = require("src.engine.game.effects.chaosemerald")
+
 Discoball = require("src.engine.game.battle.bg.discoball")
 DojoBG = require("src.engine.game.battle.bg.dojobg")
 
@@ -366,6 +371,8 @@ GameOverSF = require("src.engine.game.gameoversf")
 Legend = require("src.engine.game.legend")
 
 DogCheck = require("src.engine.game.dogcheck")
+
+AchievementPopUp = require("src.engine.game.achievementpopup")
 
 
 WarpBinCodes = require("src.engine.warp_bin")

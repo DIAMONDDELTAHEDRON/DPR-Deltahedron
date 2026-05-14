@@ -1744,6 +1744,19 @@ function Battle:processAction(action)
                 self:battleText(text)
             end
             battler:setAnimation("battle/item", function()
+                local party = {action.target}
+                if action.target[1] then
+                    party = Game.battle.party
+                end
+                for _,char in ipairs(party) do
+                    for index, chara in ipairs(Game.battle.party) do
+                        local reaction = chara.chara:getBattleReaction(item, char.chara)
+                        if reaction and chara.chara:getHealth() > 0 then
+                            self.battle_ui.action_boxes[index].reaction_alpha = 50
+                            self.battle_ui.action_boxes[index].reaction_text = reaction
+                        end
+                    end
+                end
                 local result = item:onBattleUse(battler, action.target)
                 if result or result == nil then
                     self:finishAction(action)
@@ -3536,7 +3549,7 @@ end
 --- Resets the enemies index table, closing all gaps in the enemy select menu
 ---@param reset_xact? boolean         Whether to also reset the XACT position
 function Battle:resetEnemiesIndex(reset_xact)
-    self.enemies_index = TableUtils.copy(self.enemies, true)
+    self.enemies_index = TableUtils.copy(self.enemies)
     if reset_xact ~= false then
         self.battle_ui:resetXACTPosition()
     end
@@ -3650,7 +3663,7 @@ end
 
 ---@param key string
 function Battle:onKeyPressed(key)
-    if Kristal.Config["debug"] and Input.ctrl() then
+    if Kristal.isDevMode() and Input.ctrl() then
         if key == "h" then
             for _, party in ipairs(self.party) do
                 party:heal(math.huge)

@@ -159,12 +159,8 @@ end
 function Player:preDraw()
 	self.lastx, self.lasty = self.x, self.y
 	if self.onrotatingtower then
-		if self.world.map.cyltower.krisx then
-			self.x = self.world.map.cyltower.krisx
-		end
-		if self.world.map.cyltower.krisy then
-			self.y = self.world.map.cyltower.krisy
-		end
+		self.x = self.world.map.cyltower.krisx
+		self.y = self.world.map.cyltower.krisy
 	end
 	super.preDraw(self)
 end
@@ -446,9 +442,7 @@ function Player:processClimbInputs()
 					self:climb_ready_callback()
 					self.climb_ready_callback = nil
 				end
-				if self.sprite.frames then
-					self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
-				end
+				self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
 				if self.sprite.sprite_options[2] ~= "climb/climb" then
 					self:setSprite("climb/climb")
 					self.sprite:setFrame(1)
@@ -472,9 +466,7 @@ function Player:processClimbInputs()
                 self:climb_ready_callback()
                 self.climb_ready_callback = nil
             end
-			if self.sprite.frames then
-				self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
-			end
+            self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
 			if self.falling <= 0 then
 				self.neutralcon = 1
 			end
@@ -492,9 +484,8 @@ function Player:processClimbInputs()
                 self:climb_ready_callback()
                 self.climb_ready_callback = nil
             end
-			if self.sprite.frames then
-				self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
-			end
+            self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
+
             if self.sprite.sprite_options[2] ~= "climb/climb" then
                 self:setSprite("climb/climb")
                 self.sprite:setFrame(1)
@@ -589,10 +580,8 @@ function Player:processJumpCharge()
 
             for i = 1, #self.charge_times-1 do
                 if (self.jumpchargetimer >= self.charge_times[i]) then
-					if self.sprite.frames then
-						self.sprite:setFrame(MathUtils.clamp(i+1, 1, #self.sprite.frames))
-					end
-					self.jumpchargesfx:setPitch(0.5 + (i-1)/10)
+                    self.sprite:setFrame(MathUtils.clamp(i+1, 1, #self.sprite.frames))
+                    self.jumpchargesfx:setPitch(0.5 + (i-1)/10)
                     self.jumpchargeamount = i+1;
                     self.color = TableUtils.lerp(COLORS.white, COLORS.teal, 0.2 + (math.floor(math.sin(self.jumpchargetimer / 2)) * 0.2));
                 end
@@ -600,9 +589,7 @@ function Player:processJumpCharge()
 
 
             if (self.jumpchargetimer >= (self.charge_times[#self.charge_times] or math.huge)) then
-				if self.sprite.frames then
-					self.sprite:setFrame(MathUtils.clamp(#self.charge_times+1, 1, #self.sprite.frames))
-				end
+                self.sprite:setFrame(MathUtils.clamp(#self.charge_times+1, 1, #self.sprite.frames))
                 self.jumpchargeamount = (#self.charge_times+1);
                 self.jumpchargesfx:setPitch(0.5 + (#self.charge_times)/10)
                 self.color = TableUtils.lerp(COLORS.white, COLORS.teal, 0.4 + (math.floor(math.sin(self.jumpchargetimer)) * 0.4));
@@ -718,9 +705,7 @@ function Player:doClimbJump(direction, distance)
                 end
                 self.sprite:play(0.1, true)
             else
-				if self.sprite.frames then
-					self.sprite:setFrame(MathUtils.wrap(math.floor(self.sprite.frame + 1, 2), 1, #self.sprite.frames+1))
-				end
+                self.sprite:setFrame(MathUtils.wrap(math.floor(self.sprite.frame + 1, 2), 1, #self.sprite.frames+1))
             end
 
 			local dust_amount = 1
@@ -815,9 +800,7 @@ function Player:doClimbJump(direction, distance)
 						self:climb_ready_callback()
 						self.climb_ready_callback = nil
 					end
-					if self.sprite.frames then
-						self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
-					end
+					self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
 
 					if self.sprite.sprite_options[2] ~= "climb/climb" then
 						self:setSprite("climb/climb")
@@ -840,9 +823,7 @@ function Player:doClimbJump(direction, distance)
 						self:climb_ready_callback()
 						self.climb_ready_callback = nil
 					end
-					if self.sprite.frames then
-						self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
-					end
+					self.sprite:setFrame(MathUtils.wrap(self.sprite.frame + 1, 1, #self.sprite.frames + 1))
 
 					if self.sprite.sprite_options[2] ~= "climb/climb" then
 						self:setSprite("climb/climb")

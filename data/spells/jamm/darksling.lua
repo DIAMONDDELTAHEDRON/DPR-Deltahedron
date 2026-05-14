@@ -24,6 +24,27 @@ function spell:init()
     self.tags = {"Damage"}
 end
 
+function spell:getName()
+    if Game:getFlag("jamm_skill_21") and not Game.light then   -- for testing purposes
+        return "Knightsling"
+    end
+    return self.name
+end
+
+function spell:getTPCost(chara)
+    if Game:getFlag("jamm_skill_21") and not Game.light then
+        return self.cost + 15
+    end
+    return self.cost
+end
+
+function spell:getMPCost(chara)
+    if Game:getFlag("jamm_skill_21") and not Game.light then
+        return self.mana_cost + 15
+    end
+    return self.mana_cost
+end
+
 function spell:getCastMessage(user, target)
     return "* "..user.chara:getName().." used "..self:getCastName().."!"
 end
@@ -33,10 +54,26 @@ function spell:getLightCastMessage(user, target)
 end
 
 function spell:onCast(user, target)
+    local mult = 1
+    if Game:getFlag("jamm_skill_21") and not Game.light then
+        mult = Game:getElementAvgMult("DARK", "STAR")
+    end
+    
 	local damage = math.floor((((user.chara:getStat("attack") * 400) / 20) - 3 * (target.defense)) * 1.3)
 	if target.boss then
 		damage = math.floor((((user.chara:getStat("attack") * 130) / 20) - 3 * (target.defense)) * 1.7)
 	end
+    
+    if Game:getFlag("jamm_skill_2") then
+        damage = damage * (target.boss and 1.1 or 1.2)
+    end
+    
+    damage = damage * mult
+    
+    if Game:getFlag("jamm_skill_21") and not Game.light then
+        damage = damage/target:getResistance("STAR")
+        damage = damage/target:getResistance("DARK")
+    end
 
 	local function generateSlash(scale_x)
 		local cutAnim = Sprite("effects/attack/sling")

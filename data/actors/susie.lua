@@ -13,7 +13,7 @@ function actor:init(style)
     self.height = 43
 
     -- Hitbox for this actor in the overworld (optional, uses width and height by default)
-    self.hitbox = {3, 31, 19, 14}
+    self.hitbox = {3, 31, 18, 14}
     
     -- A table that defines where the Soul should be placed on this actor if they are a player.
     -- First value is x, second value is y.
@@ -402,6 +402,8 @@ function actor:init(style)
     self.menu_anim = "pose"
 
 	self.shiny_id = "susie"
+
+    self.running_sprites = true
 end
 
 function actor:getAnimation(anim)
@@ -414,35 +416,6 @@ function actor:getAnimation(anim)
         return self.animations_eyes[anim] or nil
     else
         return super.getAnimation(self, anim)
-    end
-end
-
-function actor:onWorldDraw(chara)
-    if Kristal.Config["runAnimations"] then
-        local player = Game.world.player
-
-        local moving = false
-        local c, b = chara.x, chara.y
-        if c ~= self.l or b ~= self.ll then
-            moving = true
-        end
-
-        if Game.world.cutscene and not self.cut then
-            self.default = "walk"
-            chara:resetSprite()
-            self.cut = true
-        elseif not Game.world.cutscene then
-            if self.cut then self.cut = nil end
-            if player.run_timer > 0 and self.default == "walk" and not Game.world.cutscene and moving then
-                self.default = "run"
-                chara:resetSprite()
-            elseif self.default == "run" and (player.run_timer == 0 or moving == false) then
-                self.default = "walk"
-                chara:resetSprite()
-            end
-        end
-        self.l = chara.x
-        self.ll = chara.y
     end
 end
 

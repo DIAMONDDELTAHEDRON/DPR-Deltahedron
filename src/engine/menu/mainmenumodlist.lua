@@ -108,7 +108,7 @@ function MainMenuModList:onKeyPressed(key, is_repeat)
 
             elseif mod then
                 Assets.stopAndPlaySound("ui_select")
-                if (mod["useSaves"] == "has_saves" and (#love.filesystem.getDirectoryItems("saves/" .. mod.id) > 0))
+                if (mod["useSaves"] == "has_saves" and Kristal.hasAnySaves(mod.id))
                 or (mod["useSaves"] ~= "has_saves" and mod["useSaves"])
                 or (mod["useSaves"] == nil and not mod["encounter"]) then
                     self.menu:setState("FILESELECT")
@@ -533,11 +533,13 @@ function MainMenuModList:buildModList()
             }
 
             local music = Music()
-            music:playFile(mod.preview_music_path, 0, 1)
-            music:setLooping(self.music_options[mod.id].loop)
-            music:stop()
-
-            self.music[mod.id] = music
+            if mod then
+                music:playFile(mod.preview_music_path, 0, 1)
+                music:setLooping(self.music_options[mod.id].loop)
+                music:stop()
+    
+                self.music[mod.id] = music
+            end
         end
 
         -- Get the engine versions this mod is compatible with

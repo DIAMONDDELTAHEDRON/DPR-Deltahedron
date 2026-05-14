@@ -8,7 +8,7 @@ function actor:init()
     self.width = 25
     self.height = 52
 
-    self.hitbox = {3, 40, 19, 14}
+    self.hitbox = {3, 40, 18, 14}
 
     self.soul_offset = {12.5, 28}
 
@@ -24,10 +24,10 @@ function actor:init()
     self.can_blush = false
 
     self.talk_sprites = {
-        ["talk/down"] = 0.2,
-        ["talk/right"] = 0.2,
-        ["talk/left"] = 0.2,
-        ["talk/up"] = 0.2
+        ["talk/down"] = 1/6,
+        ["talk/right"] = 1/6,
+        ["talk/left"] = 1/6,
+        ["talk/up"] = 1/6
     }
 
     self.animations = {
@@ -58,11 +58,15 @@ function actor:init()
 
         -- Cutscene offsets
         ["deflect"] = {-9, -7},
-        ["fall"] = {0, 0},
+        ["fall"] = {-10, 1},
+        ["fall_alt"] = {-10, 1},
         ["guard"] = {-17, -11},
         ["picture"] = {-17, -9},
         ["right_down"] = {-1, -2},
         ["right_down_more"] = {1, -2},
+        ["shock"] = {-10, 1},
+        ["shock_angry"] = {-10, 1},
+        ["shock_closed"] = {-10, 1},
         ["staff"] = {-19, -1},
         ["the_roba"] = {0, 0},
         ["unguard"] = {-17, -11},
@@ -71,35 +75,15 @@ function actor:init()
     self.taunt_sprites = {"cool", "the_roba"}
 
     self.shiny_id = "ceroba"
+
+    self.running_sprites = true
+
+    self.directional_talking = true
 end
 
-function actor:onWorldDraw(chara)
-    if Kristal.Config["runAnimations"] then
-        local player = Game.world.player
-
-        local moving = false
-        local c, b = chara.x, chara.y
-        if c ~= self.l or b ~= self.ll then
-            moving = true
-        end
-
-        if Game.world.cutscene and not self.cut then
-            self.default = "walk"
-            chara:resetSprite()
-            self.cut = true
-        elseif not Game.world.cutscene then
-            if self.cut then self.cut = nil end
-            if player.run_timer > 0 and self.default == "walk" and not Game.world.cutscene and moving then
-                self.default = "run"
-                chara:resetSprite()
-            elseif self.default == "run" and (player.run_timer == 0 or moving == false) then
-                self.default = "walk"
-                chara:resetSprite()
-            end
-        end
-        self.l = chara.x
-        self.ll = chara.y
-    end
+function actor:onTextSound()
+    Assets.stopAndPlaySound("voice/ceroba")
+    return true
 end
 
 return actor
