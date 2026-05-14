@@ -15,6 +15,10 @@ function PartyBattler:init(chara,x,y)
     self.super_flash = 0
 
     self.succumbed = false
+    
+    if self.chara.id == "jamm" and Game:getFlag("jamm_skill_4") then
+        self.shield = self.chara:getMaxShield()/2
+    end
 end
 
 function PartyBattler:removeHealthBroken(amount, swoon)
@@ -160,14 +164,14 @@ function PartyBattler:update()
     end
 end
 
-function PartyBattler:getHeadIcon()
-    if self.is_down then
-        return "head_down"
-    elseif (self.chara:getHealth() <= (self.chara:getStat("health") / 4)) then
-        return "head_low"
-    end
-    return super.getHeadIcon(self)
-end
+-- function PartyBattler:getHeadIcon()
+    -- if self.is_down then
+        -- return "head_down"
+    -- elseif (self.chara:getHealth() <= (self.chara:getStat("health") / 4)) then
+        -- return "head_low"
+    -- end
+    -- return super.getHeadIcon(self)
+-- end
 
 
 function PartyBattler:doOverlay()
@@ -312,7 +316,7 @@ function PartyBattler:pierce(amount, exact, color, options)
 end
 
 function PartyBattler:noel_damage(amount, swoon) -- DO NOT QUESTION MY CHOICES
-    local meth = MathUtils.random(1, 4) --random number for hit chance
+    local meth = math.floor(MathUtils.random(1, 4)) --random number for hit chance
     if meth == 1 then -- haha, funny noel/null damage joke thingy
         Assets.playSound("awkward")
         Assets.playSound("voice/noel-#")

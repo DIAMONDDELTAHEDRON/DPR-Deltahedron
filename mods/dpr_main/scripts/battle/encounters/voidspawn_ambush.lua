@@ -33,4 +33,8 @@ function Voidspawn:onBattleEnd()
     end
 end
 
+function Voidspawn:onReturnToWorld(events)
+    DP:completeAchievement("defeat_voidspawn")
+end
+
 return Voidspawn

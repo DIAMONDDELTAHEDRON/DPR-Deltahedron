@@ -77,6 +77,11 @@ function spell:onCast(user, target)
 		if target.health == target.max_health then
 			mult = 0.5
 		end
+        
+        if Game:getFlag("jamm_skill_9") then
+            mult = mult * 1.5
+        end
+        
 		target:heal(damage)
 		if target:canService(self.id) then
 			target:addMercy(math.ceil(target.service_mercy*1.3*mult))

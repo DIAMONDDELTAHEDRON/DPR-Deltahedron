@@ -630,12 +630,20 @@ function DebugSystem:registerSubMenus()
 
     for id, item_data in pairs(Registry.items) do
         local item = item_data()
+        if item.postInit then
+            item:postInit()
+        end
+        local name = item:getDebugName()
         self:registerOption(
             "give_item",
-            item.name .. (item.light and " (Light Item)" or ""),
+            name .. (item.light and " (Light Item)" or ""),
             item.description,
             function()
-                Game.inventory:tryGiveItem(item_data())
+                local item = item_data()
+                if item.postInit then
+                    item:postInit()
+                end
+                Game.inventory:tryGiveItem(item)
             end
         )
     end
@@ -982,6 +990,11 @@ function DebugSystem:registerSubMenus()
         "music_test",
         function()
             self:fadeMusicOut(0)
+            if self.music then
+                self.music:remove()
+                self.music = nil
+            end
+            self.music = Music()
         end
     )
     self:registerMenuLeave(
@@ -991,7 +1004,8 @@ function DebugSystem:registerSubMenus()
             self.music:fade(
                 0, 0.5,
                 function()
-                    self.music:stop()
+                    self.music:remove()
+                    self.music = nil
                 end
             )
         end
@@ -1486,6 +1500,12 @@ end
 
 function DebugSystem:openMenu()
     Assets.playSound("ui_select")
+    self.heart:setColor(Kristal.getSoulColor())
+    if (Kristal.getState() == Game) then
+        self.heart:setSprite("player/"..Game:getSoulPartyMember():getSoulFacing().."/heart_menu")
+    else
+        self.heart:setSprite("player/heart_menu")
+    end
     self:setState("MENU")
 
     if (self.current_menu ~= nil) then
@@ -1672,10 +1692,11 @@ function DebugSystem:onKeyPressed(key, is_repeat)
             else
                 local option = options[self.current_selecting]
                 if option then
+                    local menu = self.current_menu
                     local failsound = option.func() == false
                     if failsound then
                         Assets.playSound("ui_cant_select")
-                    elseif self.current_menu ~= "sound_test" then
+                    elseif menu ~= "sound_test" then
                         Assets.playSound("ui_select")
                     end
                 end
@@ -1960,6 +1981,10 @@ function DebugSystem:onWheelMoved(x, y)
 end
 
 function DebugSystem:draw()
+    if self.state == "IDLE" and self.menu_anim_timer >= 1 then
+        return
+    end
+
     love.graphics.setFont(self.font)
     Draw.setColor(1, 1, 1, 1)
 

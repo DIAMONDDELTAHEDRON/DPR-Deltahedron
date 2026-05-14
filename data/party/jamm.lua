@@ -24,7 +24,7 @@ function character:init()
 
     if Game:getFlag("jamm_canact") then
         self.has_act = true
-		self.soul_priority = 10
+		-- self.soul_priority = 10
     else
         self.has_act = false
     end
@@ -93,17 +93,36 @@ function character:init()
     
     self.default_spell_resource = "tension"
     self.uses_mana = false
+
+    if Game:getFlag("marcy_joined", false) then
+        self.element = {
+            "ELEC",
+            "FIRE"
+        }
+    else
+        self.element = {
+            "ELEC"
+        }
+    end
+end
+
+function character:getElements()
+    local e = {"ELEC"}
+    if Game:getFlag("marcy_joined") then
+        table.insert(e, "FIRE")
+    end
+    return e
 end
 
 function character:usesMana()
-    if (false) then
+    if Game:getFlag("jamm_skill_16") then   -- for testing purposes
         return true
     end
     return false
 end
 
 function character:getDefaultSpellResourceType()
-    if (false) then
+    if Game:getFlag("jamm_skill_16") then
         return "mana"
     end
     return "tension"
@@ -140,6 +159,7 @@ end
 function character:getStarmanTheme() return "jamm" end
 
 function character:onTurnStart(battler)
+    super.onTurnStart(self, battler)
 	if self.stun then
 		Game.battle:pushForcedAction(battler, "SKIP")
 	end

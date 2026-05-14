@@ -35,11 +35,6 @@ function Mod:postInit(new_file)
     end
     local items_list = {
         {
-            result = "soulmantle",
-            item1 = "flarewings",
-            item2 = "discarded_robe"
-        },
-        {
             result = "dd_burger",
             item1 = "darkburger",
             item2 = "darkburger"
@@ -61,18 +56,63 @@ function Mod:postInit(new_file)
         },
         {
             result = "tensionbow",
-            item1 = "bshotbowtie",
+            item1 = "frayedbowtie",
             item2 = "tensionbit"
         },
         {
-            result = "peanut",
-            item1 = "nut",
-            item2 = "nut"
+            result = "tensiontie",
+            item1 = "tennatie",
+            item2 = "tentaser"
         },
         {
-            result = "quadnut",
-            item1 = "peanut",
-            item2 = "peanut"
+            result = "triribbon",
+            item1 = "twinribbon",
+            item2 = "princessrbn",
+        },
+        {
+            result = "royalpin",
+            item1 = "mousetoken",
+            item2 = "silver_card",
+        },
+        {
+            result = "casino_card",
+            item1 = "rotten_tea",
+            item2 = "amber_card",
+        },
+        {
+            result = "gold_card",
+            item1 = "leadmaker",
+            item2 = "silver_card",
+        },
+        {
+            result = "chosen_ax",
+            item1 = "chosen_blade",
+            item2 = "mane_ax"
+        },
+        {
+            result = "powerbitter",
+            item1 = "powerring",
+            item2 = "harvester"
+        },
+		{
+			result = "nullsword",
+			item1 = "glitchswd",
+			item2 = "bin_weapon"
+		},
+		{
+			result = "memory_guts",
+			item1 = "the_mushroom_hat_that_increases_the_rate_at_which_you_gain_nightmares",
+			item2 = "mind_guts"
+		},
+        {
+            result = "soulmantle",
+            item1 = "flarewings",
+            item2 = "shadowmantle"
+        },
+        {
+            result = "kindnessaxe",
+            item1 = "friend_buster",
+            item2 = "justiceaxe"
         },
     }
     Kristal.callEvent("setItemsList", items_list)
@@ -95,6 +135,7 @@ function Mod:postInit(new_file)
             Game:addPartyMember("dess")
             Game:removePartyMember("hero")
         elseif Game:isSpecialMode "WOODS" then
+            DP:completeAchievement("woods")
             Game:setPartyMembers("kris")
             Game.world:loadMap("woods/spawn")
             no_cutscene = true
@@ -222,30 +263,35 @@ function Mod:postLoad()
         Kristal.setState("Debug", save_data)
     end
     
-    self.mic_controller = MicController()
-    Game.stage:addChild(self.mic_controller)
-    if Game:getFlag("microphone_id") then
-        self.mic_controller.mic_id = Game:getFlag("microphone_id", 1)
-    end
-    if Game:getFlag("microphone_right_click") then
-        self.mic_controller.right_click_mic = Game:getFlag("microphone_right_click", 0)
-    end
-    if Game:getFlag("microphone_sensitivity") then
-        self.mic_controller.mic_sensitivity = Game:getFlag("microphone_sensitivity", 0.5)
-    end
-    if Game:getFlag("mic_active", false) then
-        Mod:enableMicAccess(self.mic_controller.mic_id)
+    if type(MicController) == "function" or type(MicController) == "table" then
+        self.mic_controller = MicController()
+        if self.mic_controller ~= nil then
+            Game.stage:addChild(self.mic_controller)
+            if Game:getFlag("microphone_id") then
+                self.mic_controller.mic_id = Game:getFlag("microphone_id", 1)
+            end
+            if Game:getFlag("microphone_right_click") then
+                self.mic_controller.right_click_mic = Game:getFlag("microphone_right_click", 1)
+            end
+            if Game:getFlag("microphone_sensitivity") then
+                self.mic_controller.mic_sensitivity = Game:getFlag("microphone_sensitivity", 0.5)
+            end
+        end
     end
 end
 
 function Mod:enableMicAccess(id)
     Game:setFlag("mic_active", true)
-    self.mic_controller:startRecordMic(id or 1)
+	if self.mic_controller.right_click_mic == 0 then
+		self.mic_controller:startRecordMic(id or 1)
+	end
 end
 
 function Mod:disableMicAccess()
     Game:setFlag("mic_active", false)
-    self.mic_controller:startRecordMic()
+	if self.mic_controller.right_click_mic == 0 then
+		self.mic_controller:stopRecordMic()
+	end
 end
 
 function Mod:openMicMenu()

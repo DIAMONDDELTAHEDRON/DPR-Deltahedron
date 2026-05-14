@@ -918,6 +918,7 @@ return {
 				black:remove()
 				eyes:remove()
 				Game.world:loadMap("floortv/green_room", "spawn", "down")
+				DP:completeAchievement("friendscare")
 				Kristal.showBorder(0)
 				Kristal.setDesiredWindowTitleAndIcon()
 			else
@@ -1410,6 +1411,7 @@ return {
     		Game:setFlag("playedDessGame", true)
     		cutscene:loadMap("floortv/legacy_corridors")
     		cutscene:fadeIn(nil, {speed=1})
+			DP:completeAchievement("dessgame")
     	else
     		cutscene:text("* Hell yeah you guys made the right choice.", "genuine_b", "dess")
     		cutscene:text("* Now let's all enjoy our last seconds of living.", "heckyeah", "dess")
@@ -1534,4 +1536,21 @@ return {
         cutscene:wait(1.5)
     end,
 
+    mike_keycard = function(cutscene, event)
+		cutscene:text("* (...? Someone left a keycard here on the ground.)")
+		local choicer = cutscene:choicer({"Pick it\nup", "Don't pick\nit up"})
+		if choicer == 1 then
+			if not Game.inventory:addItem("mike_keycard") then
+				cutscene:text("* (Somehow,[wait:5] you have too many [color:yellow]KEY ITEMS[color:reset].)")
+			else
+				if event then
+					event:remove()
+				end
+				Game:setFlag("mike_keycard", true)
+				cutscene:text("* ([color:yellow]MIKEKEYCARD[color:reset] was added to your [color:yellow]KEY ITEMS[color:reset].)")
+				Assets.playSound("item")
+			end
+		else
+		end
+    end,
 }

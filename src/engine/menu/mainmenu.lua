@@ -52,6 +52,7 @@ function MainMenu:enter()
     self.deadzone_config = MainMenuDeadzone(self)
     self.dlc_list = MainMenuDLC(self)
     self.warning = MainMenuWarning(self)
+    self.achievements = MainMenuAchievements(self)
     self.plugins = MainMenuPlugins(self)
 
     -- Register states
@@ -73,6 +74,7 @@ function MainMenu:enter()
     self.state_manager:addState("DEADZONE", self.deadzone_config)
     self.state_manager:addState("DLC", self.dlc_list)
     self.state_manager:addState("WARNING", self.warning)
+    self.state_manager:addState("ACHIEVEMENTS", self.achievements)
     self.state_manager:addState("plugins", self.plugins)
 
     for _, mod in ipairs(Kristal.Mods.getMods()) do
@@ -142,23 +144,22 @@ function MainMenu:enter()
         instance = 1
     })
 
-    self.version_outdated = false
-    GitFinder:fetchLatestCommit(function(status, body, headers)
-        if status == nil then return end -- request failed somehow (no SSL?)
-        if status < 200 or status >= 300 then return end -- non-success status code
+    if not RELEASE_MODE then
+        -- We're in an interm build, so check updates
+        GitFinder:fetchLatestCommit(function(status, body, headers)
+            if status == nil then return end -- request failed somehow (no SSL?)
+            if status < 200 or status >= 300 then return end -- non-success status code
 
-        local current_commit = GitFinder:fetchCurrentCommit()
-        if current_commit ~= body then
-            --[[
-            self.ver_string = "v" .. tostring(Kristal.Version)
-            if trimmed_commit then
-                self.ver_string = self.ver_string .. " (" .. trimmed_commit .. ")"
+            local current_commit = GitFinder:fetchCurrentCommit()
+            if current_commit ~= body then
+                self.ver_string = "v" .. tostring(Kristal.Version)
+                if trimmed_commit then
+                    self.ver_string = self.ver_string .. " (" .. trimmed_commit .. ")"
+                end
+                self.ver_string = self.ver_string .. " (outdated!)"
             end
-            self.ver_string = self.ver_string .. " (outdated!)"
-            ]]
-            self.version_outdated = true
-        end
-    end)
+        end)
+    end
 
     if TARGET_MOD then
         self.selected_mod = self.mod_list:getSelectedMod()

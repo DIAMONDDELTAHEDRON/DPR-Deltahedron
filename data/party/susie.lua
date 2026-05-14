@@ -196,6 +196,11 @@ function character:init()
 	self.rage_counter = 0
 
 	self.tv_name = "ASS"
+
+    self.element = {
+        "RUDE",
+        "FIGHT"
+    }
 end
 
 function character:getTitle()
@@ -207,6 +212,7 @@ function character:getTitle()
 end
 
 function character:onTurnStart(battler)
+    super.onTurnStart(self, battler)
 	if self:checkWeapon("harvester") and not Game:getFlag("IDLEHEALDOESNTWORK") then
         Game.battle:getPartyBattler(self.id):heal(11)
     end

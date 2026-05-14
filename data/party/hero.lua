@@ -75,6 +75,10 @@ function character:init()
     self.tv_name = "HRO"
 
     self.can_lead = true
+
+    self.element = {
+        "BLADE"
+    }
 end
 
 function character:onLevelUp(level)
@@ -136,6 +140,7 @@ function character:addKarma(ammount)
 end
 
 function character:onTurnStart(battler)
+    super.onTurnStart(self, battler)
     if self:checkWeapon("harvester") and not Game:getFlag("IDLEHEALDOESNTWORK") then
         self:heal(9)
     end
