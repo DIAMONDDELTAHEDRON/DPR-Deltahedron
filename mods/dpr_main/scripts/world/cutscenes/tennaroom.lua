@@ -287,7 +287,7 @@ return {
             cutscene:wait(0.4)
             cutscene:setSpeaker(spta)
             Assets.playSound("impact")
-            cutscene:text("* WE CAN'T SHOW THAT ON TV! WE'LL BE F", {auto = true})
+            cutscene:text("* WE CAN'T SHOW THAT ON TV! WE'LL BE F[wait:2]", {auto = true})
             cutscene:text("[instant]* <This content was removed for violating our community guidelines>")
         else
         if susie then

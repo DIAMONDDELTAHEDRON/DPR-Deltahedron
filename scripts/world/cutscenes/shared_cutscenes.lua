@@ -480,7 +480,7 @@ return {
 	end,
 
     bad_apple = function(cutscene, event)
-        
+
         local player = Game.world.player
         local boss = NPC("horse", player.x+300, player.y)
         boss.layer = player.layer + 0.1
@@ -512,7 +512,6 @@ return {
         boss:remove()
 end,
 good_apple = function(cutscene, event)
-        
         local player = Game.world.player
         local boss = NPC("horse", player.x+300, player.y)
         boss.layer = player.layer + 0.1
@@ -535,10 +534,13 @@ good_apple = function(cutscene, event)
         cutscene:wait(0.5)
         Assets.playSound("yummy")
         cutscene:wait(0.7)
+        Game.party[1]:heal(5, true)
         cutscene:text("* I'm not changing the music back.")
         Game.world.timer:tween(1, boss, {x = player.x+500}, "out-cubic")
         cutscene:wait(1)
         boss:remove()
+        
+        
 end
 }
 

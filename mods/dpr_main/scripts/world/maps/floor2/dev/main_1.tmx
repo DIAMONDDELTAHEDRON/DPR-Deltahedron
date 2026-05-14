@@ -147,7 +147,7 @@
    </properties>
    <point/>
   </object>
-  <object id="47" name="npc" x="1016" y="257.333">
+  <object id="47" name="npc" x="872" y="260.667">
    <properties>
     <property name="actor" value="chara"/>
     <property name="text" value="* Hi no way it's me chara from undertale"/>
