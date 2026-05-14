@@ -48,12 +48,7 @@ function item:init()
 end
 
 function item:onWorldUse()
-    if Game:getFlag("applesallowed") == true then
     Game.world:startCutscene("shared_cutscenes", "bad_apple")
-    else
-        cutscene:text("* (You feel Chara's words echoing in your head...)")
-            cutscene:text("* There's a time and place for everything, and that time is not now!")
-    end
 end
 
 return item
