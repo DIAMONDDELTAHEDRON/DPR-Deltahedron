@@ -48,3 +48,5 @@ DELTARUNE_SAVE_ID = nil
 
 ---@type string?
 COROUTINE_TRACEBACK = nil
+
+SOUND_DISABLED = false

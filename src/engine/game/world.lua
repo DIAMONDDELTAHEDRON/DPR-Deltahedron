@@ -195,9 +195,15 @@ function World:hurtParty(battler, amount)
     local any_killed = false
     local any_alive = false
     for _, party in ipairs(Game.party) do
+        local current_amount = amount
+
+        for _, item in ipairs(party:getEquipment()) do
+            current_amount = item:onWorldDamage(current_amount) or current_amount
+        end
+
         if not battler or battler == party.id or battler == party then
             local current_health = party:getHealth()
-            party:setHealth(party:getHealth() - amount)
+            party:setHealth(party:getHealth() - current_amount)
             if party:getHealth() <= 0 then
                 party:setHealth(1)
                 any_killed = true
@@ -212,7 +218,7 @@ function World:hurtParty(battler, amount)
                     char:statusMessage("damage", dealt_amount)
                 end
             end
-        elseif party:getHealth() > amount then
+        elseif party:getHealth() > current_amount then
             any_alive = true
         end
     end
@@ -475,6 +481,23 @@ function World:checkCollision(collider, enemy_check)
     end
     Object.endCache()
     return false
+end
+
+--- Returns all the inputs `collider` is currently colliding with in the world
+---@param collider      Collider    The collider to check collisions for
+---@param enemy_check?  boolean     Whether to include the enemy collision map in the check
+---@return boolean  collided    Whether a collision was found
+---@return Object[] collisions The objects that were collided with
+function World:checkCollisions(collider, enemy_check)
+    local collided_with = {}
+    Object.startCache()
+    for _, other in ipairs(self:getCollision(enemy_check)) do
+        if collider:collidesWith(other) and collider ~= other then
+            table.insert(collided_with, other.parent)
+        end
+    end
+    Object.endCache()
+    return #collided_with > 0, collided_with
 end
 
 --- Whether the world has a currently active cutscene
