@@ -479,4 +479,70 @@ return {
         cutscene:wait(0.5)
 	end,
 
+    bad_apple = function(cutscene, event)
+
+        local player = Game.world.player
+        local boss = NPC("horse", player.x+300, player.y)
+        boss.layer = player.layer + 0.1
+        Game.world:addChild(boss)
+        boss:setAnimation({"horse", 0, false})
+        Game.world.music:play("horseoverworld")
+        Game.world.music:fade(1, 0.9)
+        Game.world.timer:tween(1, boss, {x = player.x+170}, "out-cubic")
+        cutscene:wait(1)
+        cutscene:setSpeaker(boss)
+        Game.inventory:removeItem("evil_apple")
+        cutscene:text("* Ooo yummy an apple.")
+        Assets.playSound("horseeat")
+        boss:setAnimation({"horse", 0.2, false})
+        Assets.playSound("horseeat")
+        cutscene:wait(1)
+        boss:setAnimation({"evilhorse", 0, false})
+        Game.world.music:pause()
+        cutscene:wait(1)
+        boss:setAnimation({"evilhorse", 0.5, false})
+        cutscene:wait(0.5)
+        Assets.playSound("notyummy")
+        cutscene:wait(0.7)
+        Game.world.music:resume()
+        cutscene:startEncounter("horse", true, boss)
+        cutscene:text("* I'm not changing the music back.")
+        Game.world.timer:tween(1, boss, {x = player.x+500}, "out-cubic")
+        cutscene:wait(1)
+        boss:remove()
+end,
+good_apple = function(cutscene, event)
+        local player = Game.world.player
+        local boss = NPC("horse", player.x+300, player.y)
+        boss.layer = player.layer + 0.1
+        Game.world:addChild(boss)
+        boss:setAnimation({"horse", 0, false})
+        Game.world.music:play("horseoverworld")
+        Game.world.music:fade(1, 0.9)
+        Game.world.timer:tween(1, boss, {x = player.x+170}, "out-cubic")
+        cutscene:wait(1)
+        cutscene:setSpeaker(boss)
+        Game.inventory:removeItem("good_apple")
+        cutscene:text("* Ooo yummy an apple.")
+        Assets.playSound("horseeat")
+        boss:setAnimation({"horse", 0.2, false})
+        Assets.playSound("horseeat")
+        cutscene:wait(1)
+        boss:setAnimation({"horse", 0, false})
+        cutscene:wait(1)
+        boss:setAnimation({"horse", 0.5, false})
+        cutscene:wait(0.5)
+        Assets.playSound("yummy")
+        cutscene:wait(0.7)
+        Game.party[1]:heal(5, true)
+        cutscene:text("* I'm not changing the music back.")
+        Game.world.timer:tween(1, boss, {x = player.x+500}, "out-cubic")
+        cutscene:wait(1)
+        boss:remove()
+        
+        
+end
 }
+
+
+

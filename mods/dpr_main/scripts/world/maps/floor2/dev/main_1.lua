@@ -1,7 +1,7 @@
 return {
-  version = "1.10",
+  version = "1.11",
   luaversion = "5.1",
-  tiledversion = "1.10.2",
+  tiledversion = "1.11.2",
   class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
@@ -10,7 +10,7 @@ return {
   tilewidth = 40,
   tileheight = 40,
   nextlayerid = 8,
-  nextobjectid = 47,
+  nextobjectid = 48,
   properties = {
     ["border"] = "dev",
     ["music"] = "dev",
@@ -610,6 +610,24 @@ return {
             ["actor"] = "arlee",
             ["cutscene"] = "devroom.arlee",
             ["flagcheck"] = "!arlee_quest"
+          }
+        },
+        {
+          id = 47,
+          name = "npc",
+          type = "",
+          shape = "point",
+          x = 872,
+          y = 260.667,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["actor"] = "chara",
+            ["text1"] = "* Hi no way it's me chara from undertale",
+            ["text2"] = "* This is placeholder dialogue until I finish the heese (Plural of horse) battle lmao",
+            ["text3"] = "* So, I guess that means... TEST FUCKING DIALOGUE!!1!"
           }
         }
       }
