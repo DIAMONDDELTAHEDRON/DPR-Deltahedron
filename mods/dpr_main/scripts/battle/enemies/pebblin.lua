@@ -37,6 +37,10 @@ function Pebblin:init()
     self:registerAct("Polish")
     self:registerAct("X-Polish", "", {"susie"})
 
+    if Game.party[1].id == "hero" then
+        self:registerAct("Mug")
+    end
+
     self.resistances = {
         DARK = 0.5,
     }
@@ -61,7 +65,17 @@ function Pebblin:onAct(battler, name)
             "* Susie said some Polish swear words.",
             "* The Pebblin became angry!\n* Their attack increased, but they became [color:blue]TIRED[color:reset]!"
         }
-
+    elseif name == "Mug" then
+        if self.mugged then
+            return "* Hero threatens Pebblin again, but there was nothing left to mug."
+        end
+        self.mugged = true
+        self.dialogue_override = Utils.pick{"Zjedz trochę słodyczy!", "Ciesz się!"}
+        Game.inventory:addItem("rock_candy")
+        return {
+            "* Hero threatens Pebblin.\n* Pebblin hastily empties their pockets.",
+            "* [color:yellow]ROCK CANDY[color:reset] was added to your inventory!"
+        }
     elseif name == "Standard" then --X-Action
         self:addMercy(50)
         return "* "..battler.chara:getName().." tried to polish Pebblin's club."
