@@ -57,10 +57,7 @@ return {
         cutscene:text("* Whaddya need from your good \nol' pal?", nil, "tenna")
         cutscene:hideNametag()
 
-        local choicer = {"Why are\nyou 3D?", "Nothing", "Games"}
-        if Game:getFlag("arlee_quest") then
-            table.insert(choicer, "Starbits?")
-        end
+        local choicer = {"Why are\nyou 3D?", "Nothing", "Games", "TV Challenge"}
 
         local choice = cutscene:choicer(choicer)
         cutscene:showNametag("Mr. (Ant) Tenna")
@@ -117,7 +114,16 @@ return {
             cutscene:text("* I've learned by now that forcing someone to play NEVER works well.", nil, "tenna")
             Game:setFlag("ramb_games", true)
         elseif choice == 4 then
-            if not Game:getFlag("tenna_physicalchallenge") then
+            cutscene:text("* Write TV Challenge dialogue here", nil, "tenna")
+			cutscene:hideNametag()
+			local choice_tvchal = cutscene:choicer({"Challenge", "No thanks"})
+			if choice_tvchal == 1 then
+				local encounter = cutscene:startEncounter("tenna", nil, {tenna})
+				cutscene:showNametag("Mr. (Ant) Tenna")
+				cutscene:text("* TODO: Win cutscene, maybe do something else if you gameover", nil, "tenna")
+				cutscene:hideNametag()
+			end
+			--[[if not Game:getFlag("tenna_physicalchallenge") then
                 tenna.sprite:setTennaSprite(2, "pose_podium_1", 1)
                 cutscene:text("* Huh?[wait:10] Have I seen any STARBITS lying around?", nil, "tenna")
                 tenna.sprite:setTennaSprite(1, nil, 1)
@@ -155,7 +161,7 @@ return {
                     tenna.sprite:setTennaSprite(17, nil, 1)
                     cutscene:text("* Remember,[wait:5] the stickers look like me,[wait:5] you can't miss 'em.", nil, "tenna")
                 end
-            end
+            end]]
         end
 
         tenna.sprite:setTennaSprite(24, nil, 1)
