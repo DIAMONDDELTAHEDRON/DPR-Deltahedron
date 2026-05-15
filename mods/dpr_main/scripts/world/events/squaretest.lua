@@ -25,7 +25,7 @@ function SquareTest:init(x, y, shape)
     self.lerpouter = 0.5
 self.canvas = love.graphics.newCanvas(SCREEN_WIDTH*2, SCREEN_HEIGHT*2)
 local fx = self:addFX(MaskFX(function()
-    love.graphics.circle("fill", self.falsex+(math.sin(self.siner * 1) * 15) -(Game.world.camera.x - 320), self.falseyy+(math.sin(self.siner * 1.7) * 12 - self.holeheight)-(Game.world.camera.y - 240)-15, (self.size+self.extrabigsize)+(math.sin(self.siner * 2.3 + self.extrabigsizeoffset) * 10 + self.extrasize))
+    love.graphics.circle("fill", self.falsex+(math.sin(self.siner * 1) * 15) -(Game.world.camera.x - 320), self.falsey+(math.sin(self.siner * 1.7) * 12 - self.holeheight)-(Game.world.camera.y - 240)-15, (self.size+self.extrabigsize)+(math.sin(self.siner * 2.3 + self.extrabigsizeoffset) * 10 + self.extrasize))
     love.graphics.circle("fill", self.falsexx+(math.sin(self.siner * 1) * 15) -(Game.world.camera.x - 320), self.falseyy+(math.sin(self.siner * 1.7) * 12 + self.posy - self.holeheight)-(Game.world.camera.y - 240)-15, self.size+(math.sin(self.siner * 2.3) * 10 + self.extrasize))
     love.graphics.circle("fill", self.falsexx+(math.sin(self.siner * 1) * 15) -(Game.world.camera.x - 320), self.falseyy+(math.sin(self.siner * 1.7) * 12 - self.posy - self.holeheight)-(Game.world.camera.y - 240)-15, self.size+(math.sin(self.siner * 2.3) * 10 + self.extrasize))
     love.graphics.circle("fill", self.falsexx+(math.sin(self.siner * 1) * 15) -(Game.world.camera.x - 320)+(self.posx/1.1), self.falseyy+(math.sin(self.siner * 1.7) * 12 + (self.posy/1.1) - self.holeheight)-(Game.world.camera.y - 240)-15, self.size+(math.sin(self.siner * 2.3) * 10 + self.extrasize))
