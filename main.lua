@@ -349,7 +349,6 @@ MirrorEffect = require("src.engine.game.effects.mirroreffect")
 MultiFlareFireball = require("src.engine.game.effects.multiflarefireball")
 PaciBusterBeam = require("src.engine.game.effects.pacibusterbeam")
 SoulExpandEffect = require("src.engine.game.effects.soulexpandeffect")
-SoulGlowEffect = require("src.engine.game.effects.soulgloweffect")
 CerobaDiamondBuff = require("src.engine.game.effects.cerobadiamondbuff")
 
 ChaosEmerald = require("src.engine.game.effects.chaosemerald")
